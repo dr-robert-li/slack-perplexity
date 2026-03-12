@@ -63,25 +63,25 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INTR-01 | — | Pending |
-| INTR-02 | — | Pending |
-| INTR-03 | — | Pending |
-| INTR-04 | — | Pending |
-| RESP-01 | — | Pending |
-| RESP-02 | — | Pending |
-| RESP-03 | — | Pending |
-| RESP-04 | — | Pending |
-| RELY-01 | — | Pending |
-| RELY-02 | — | Pending |
-| RELY-03 | — | Pending |
-| SURF-01 | — | Pending |
-| SURF-02 | — | Pending |
+| INTR-01 | Phase 1 | Pending |
+| INTR-02 | Phase 2 | Pending |
+| INTR-03 | Phase 2 | Pending |
+| INTR-04 | Phase 1 | Pending |
+| RESP-01 | Phase 1 | Pending |
+| RESP-02 | Phase 1 | Pending |
+| RESP-03 | Phase 1 | Pending |
+| RESP-04 | Phase 1 | Pending |
+| RELY-01 | Phase 1 | Pending |
+| RELY-02 | Phase 1 | Pending |
+| RELY-03 | Phase 1 | Pending |
+| SURF-01 | Phase 2 | Pending |
+| SURF-02 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 13 total
-- Mapped to phases: 0
-- Unmapped: 13 ⚠️
+- Mapped to phases: 13
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-13*
-*Last updated: 2026-03-13 after initial definition*
+*Last updated: 2026-03-13 after roadmap creation — all 13 requirements mapped*
