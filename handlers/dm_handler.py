@@ -1,4 +1,8 @@
-"""DM message handler — full pipeline from Slack DM to cited Perplexity answer."""
+"""Message handler — full pipeline from Slack message to cited Perplexity answer.
+
+Supports both DMs and @mentions in channels.
+"""
+import re
 import threading
 
 from services.perplexity import query_perplexity
@@ -16,6 +20,9 @@ GREETING = (
     "Ask me anything and I'll search the web for a cited answer.\n\n"
 )
 
+# Regex to strip @mention tags from message text
+MENTION_RE = re.compile(r"<@[A-Z0-9]+>\s*")
+
 
 def update_slow_message(client, channel: str, loading_ts: str) -> None:
     """Called by the 60-second timer if Perplexity is still running."""
@@ -26,28 +33,8 @@ def update_slow_message(client, channel: str, loading_ts: str) -> None:
     )
 
 
-def handle_dm(client, event: dict) -> None:
-    """Lazy listener: process a DM, post loading indicator, call Perplexity, update in-place.
-
-    Guards:
-        - Ignores events with ``bot_id`` set (prevent infinite loops).
-        - Ignores events whose ``channel_type`` is not ``"im"``.
-        - Ignores events with a ``subtype`` (e.g. ``message_changed``).
-    """
-    # --- Guards ---
-    if event.get("bot_id"):
-        return
-    if event.get("subtype"):
-        return
-    if event.get("channel_type") != "im":
-        return
-
-    channel = event["channel"]
-    thread_ts = event["ts"]
-    user_id = event.get("user", "")
-    user_text = event.get("text", "")
-
-    # Post the loading indicator in the thread
+def _handle_question(client, channel: str, thread_ts: str, user_id: str, user_text: str) -> None:
+    """Shared logic: post loading indicator, call Perplexity, update with cited answer."""
     loading_response = client.chat_postMessage(
         channel=channel,
         thread_ts=thread_ts,
@@ -55,7 +42,6 @@ def handle_dm(client, event: dict) -> None:
     )
     loading_ts = loading_response["ts"]
 
-    # Start 60-second slow-response timer
     timer = threading.Timer(60, update_slow_message, args=[client, channel, loading_ts])
     timer.start()
 
@@ -65,7 +51,6 @@ def handle_dm(client, event: dict) -> None:
 
         formatted = format_answer(result["answer"], result["citations"])
 
-        # Determine greeting prefix
         if user_id not in greeted_users:
             greeted_users.add(user_id)
             full_text = GREETING + formatted
@@ -74,14 +59,12 @@ def handle_dm(client, event: dict) -> None:
 
         chunks = split_message(full_text)
 
-        # Update loading message with first chunk
         client.chat_update(
             channel=channel,
             ts=loading_ts,
             text=chunks[0],
         )
 
-        # Post any remaining chunks as new thread messages
         for chunk in chunks[1:]:
             client.chat_postMessage(
                 channel=channel,
@@ -98,11 +81,45 @@ def handle_dm(client, event: dict) -> None:
         )
 
 
+def handle_dm(client, event: dict) -> None:
+    """Lazy listener: process a DM, call Perplexity, reply with cited answer."""
+    if event.get("bot_id"):
+        return
+    if event.get("subtype"):
+        return
+    if event.get("channel_type") != "im":
+        return
+
+    _handle_question(
+        client,
+        channel=event["channel"],
+        thread_ts=event["ts"],
+        user_id=event.get("user", ""),
+        user_text=event.get("text", ""),
+    )
+
+
+def handle_mention(event, client) -> None:
+    """Handle @mentions in channels — strip the mention tag, then answer."""
+    raw_text = event.get("text", "")
+    user_text = MENTION_RE.sub("", raw_text).strip()
+
+    if not user_text:
+        return
+
+    _handle_question(
+        client,
+        channel=event["channel"],
+        thread_ts=event["ts"],
+        user_id=event.get("user", ""),
+        user_text=user_text,
+    )
+
+
 def register_dm_handler(app) -> None:
-    """Register the DM message handler on the given Bolt app."""
+    """Register DM and @mention handlers on the given Bolt app."""
 
     def ack_dm_message(ack, event):
-        # Skip ack (and lazy processing) for events we don't handle
         if event.get("bot_id"):
             return
         if event.get("subtype"):
@@ -112,3 +129,4 @@ def register_dm_handler(app) -> None:
         ack()
 
     app.event("message")(ack=ack_dm_message, lazy=[handle_dm])
+    app.event("app_mention")(handle_mention)
