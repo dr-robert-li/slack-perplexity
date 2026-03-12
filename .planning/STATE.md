@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-core-pipeline/01-02-PLAN.md
-last_updated: "2026-03-12T23:11:36.668Z"
+stopped_at: "Checkpoint: Task 2 human-action (Live Smoke Test) awaiting real Slack/Perplexity credentials"
+last_updated: "2026-03-12T23:13:58.775Z"
 last_activity: 2026-03-13 — Roadmap created
 progress:
   total_phases: 2
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 01-core-pipeline P01 | 3 | 2 tasks | 13 files |
 | Phase 01-core-pipeline P02 | 3 | 2 tasks | 4 files |
+| Phase 01-core-pipeline P03 | 1 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,7 @@ Recent decisions affecting current work:
 - [Phase 01-core-pipeline]: Bolt App test patches WebClient.auth_test to avoid live Slack API calls
 - [Phase 01-core-pipeline]: Lazy listener syntax is app.event('message')(ack=fn, lazy=[fn]) not app.event('message', lazy=[fn])(fn)
 - [Phase 01-core-pipeline]: greeted_users module-level set sufficient for single-process Socket Mode bot first-time greeting
+- [Phase 01-core-pipeline]: .env is never committed — .gitignore entry ensures credentials are always local-only
 
 ### Pending Todos
 
@@ -80,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T23:11:36.666Z
-Stopped at: Completed 01-core-pipeline/01-02-PLAN.md
+Last session: 2026-03-12T23:13:54.689Z
+Stopped at: Checkpoint: Task 2 human-action (Live Smoke Test) awaiting real Slack/Perplexity credentials
 Resume file: None

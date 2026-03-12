@@ -12,7 +12,7 @@ Two phases deliver a fully working bot. Phase 1 builds the complete core pipelin
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Core Pipeline** - Project setup, Perplexity service layer, DM handler with full reliability and response quality
+- [x] **Phase 1: Core Pipeline** - Project setup, Perplexity service layer, DM handler with full reliability and response quality (completed 2026-03-12)
 - [ ] **Phase 2: Full Trigger Coverage** - @mention, /ask slash command, and App Home tab
 
 ## Phase Details
@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Bot uses the `pro-search` preset and all answers include source URLs extracted from Perplexity search results
   4. When Perplexity is unreachable, the bot replies with the friendly error message directing to @Robert Li
   5. Bot never replies to its own messages and all event handlers acknowledge within 3 seconds
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md — Project scaffolding, Perplexity service layer, formatting utils, test infrastructure
@@ -51,5 +51,5 @@ Phases execute in numeric order: 1 → 2
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Pipeline | 2/3 | In Progress|  |
+| 1. Core Pipeline | 3/3 | Complete   | 2026-03-12 |
 | 2. Full Trigger Coverage | 0/TBD | Not started | - |
