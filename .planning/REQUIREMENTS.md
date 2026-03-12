@@ -9,23 +9,23 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Core Interaction
 
-- [ ] **INTR-01**: User can DM the bot a question and receive a Perplexity-powered answer
+- [x] **INTR-01**: User can DM the bot a question and receive a Perplexity-powered answer
 - [ ] **INTR-02**: User can @mention the bot in any channel and receive an answer in a thread
 - [ ] **INTR-03**: User can use `/ask <question>` slash command from any channel to get an answer
-- [ ] **INTR-04**: All bot responses are posted as threaded replies (not top-level messages)
+- [x] **INTR-04**: All bot responses are posted as threaded replies (not top-level messages)
 
 ### Response Quality
 
-- [ ] **RESP-01**: Bot posts a "Searching..." loading indicator before the answer arrives
-- [ ] **RESP-02**: Bot updates the loading message with the full answer once Perplexity responds
+- [x] **RESP-01**: Bot posts a "Searching..." loading indicator before the answer arrives
+- [x] **RESP-02**: Bot updates the loading message with the full answer once Perplexity responds
 - [x] **RESP-03**: Answers include numbered source citations with clickable URLs extracted from Perplexity search results
 - [x] **RESP-04**: Bot uses Perplexity `pro-search` preset for optimized model selection and web search
 
 ### Reliability
 
-- [ ] **RELY-01**: Bot displays friendly error message when backend/Perplexity is unreachable: "Uh oh, it seems my brain is offline — talk to @Robert Li about trying to kick start it"
-- [ ] **RELY-02**: Bot ignores its own messages to prevent self-response loops
-- [ ] **RELY-03**: Handlers ack() within 3 seconds before making Perplexity API calls
+- [x] **RELY-01**: Bot displays friendly error message when backend/Perplexity is unreachable: "Uh oh, it seems my brain is offline — talk to @Robert Li about trying to kick start it"
+- [x] **RELY-02**: Bot ignores its own messages to prevent self-response loops
+- [x] **RELY-03**: Handlers ack() within 3 seconds before making Perplexity API calls
 
 ### App Surface
 
@@ -63,17 +63,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INTR-01 | Phase 1 | Pending |
+| INTR-01 | Phase 1 | Complete |
 | INTR-02 | Phase 2 | Pending |
 | INTR-03 | Phase 2 | Pending |
-| INTR-04 | Phase 1 | Pending |
-| RESP-01 | Phase 1 | Pending |
-| RESP-02 | Phase 1 | Pending |
+| INTR-04 | Phase 1 | Complete |
+| RESP-01 | Phase 1 | Complete |
+| RESP-02 | Phase 1 | Complete |
 | RESP-03 | Phase 1 | Complete |
 | RESP-04 | Phase 1 | Complete |
-| RELY-01 | Phase 1 | Pending |
-| RELY-02 | Phase 1 | Pending |
-| RELY-03 | Phase 1 | Pending |
+| RELY-01 | Phase 1 | Complete |
+| RELY-02 | Phase 1 | Complete |
+| RELY-03 | Phase 1 | Complete |
 | SURF-01 | Phase 2 | Pending |
 | SURF-02 | Phase 1 | Complete |
 
