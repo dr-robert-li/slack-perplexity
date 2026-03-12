@@ -1,0 +1,5 @@
+slack_bolt
+perplexityai
+python-dotenv
+pytest
+pytest-mock
