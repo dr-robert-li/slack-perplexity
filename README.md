@@ -8,7 +8,8 @@ A Slack bot that answers questions using Perplexity AI with cited sources. DM it
 2. It replies with "Searching..." in a thread
 3. Perplexity AI searches the web and generates a cited answer
 4. The loading message updates in-place with the full response
-5. Citations appear as clickable Slack links
+5. Markdown is automatically converted to Slack-native formatting
+6. Citations appear as clickable Slack links at the bottom
 
 ## Setup
 

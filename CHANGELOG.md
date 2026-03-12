@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-03-13
+
+### Added
+
+- @mention support — use the bot in any channel via `@Kahm-pew-terr`
+- Markdown-to-Slack formatting (bold, headings, links, code blocks, dividers)
+- Strip Perplexity inline references (`[web:N]`) — citations shown at bottom only
+
+### Changed
+
+- Refactored handler into shared `_handle_question()` for DMs and mentions
+- "No web sources" disclaimer now renders in italic
+
 ## [0.1.0] - 2026-03-13
 
 ### Added

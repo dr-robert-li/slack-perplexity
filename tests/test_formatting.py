@@ -13,14 +13,14 @@ class TestFormatAnswer:
             answer="Hello",
             citations=[{"title": "Page", "url": "https://example.com"}],
         )
-        assert result == "Hello\n---\n[1] <https://example.com|Page>"
+        assert result == "Hello\n───\n[1] <https://example.com|Page>"
 
     def test_format_no_citations(self):
         """Empty citations list appends the 'No web sources' disclaimer."""
         from utils.formatting import format_answer
 
         result = format_answer(answer="Hello", citations=[])
-        assert result == "Hello\n\nNo web sources found for this query"
+        assert result == "Hello\n\n_No web sources found for this query_"
 
     def test_format_multiple_citations(self):
         """Three citations produce [1], [2], [3] numbered entries."""
@@ -36,7 +36,7 @@ class TestFormatAnswer:
         assert "[1] <https://alpha.com|Alpha>" in result
         assert "[2] <https://beta.com|Beta>" in result
         assert "[3] <https://gamma.com|Gamma>" in result
-        assert result.startswith("Multi answer\n---\n")
+        assert result.startswith("Multi answer\n───\n")
 
 
 class TestSplitMessage:
