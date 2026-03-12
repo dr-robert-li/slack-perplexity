@@ -111,4 +111,4 @@ def register_dm_handler(app) -> None:
             return
         ack()
 
-    app.event("message", lazy=[handle_dm])(ack_dm_message)
+    app.event("message")(ack=ack_dm_message, lazy=[handle_dm])

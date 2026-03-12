@@ -10,7 +10,8 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-# Handler registration will be added in Plan 02
+from handlers.dm_handler import register_dm_handler
+register_dm_handler(app)
 
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
