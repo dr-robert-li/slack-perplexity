@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-12T22:48:43.885Z"
+stopped_at: Completed 01-core-pipeline/01-01-PLAN.md
+last_updated: "2026-03-12T23:06:49.174Z"
 last_activity: 2026-03-13 — Roadmap created
 progress:
   total_phases: 2
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-core-pipeline P01 | 3 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ Recent decisions affecting current work:
 - pro-search preset — auto model selection, web search, URL fetch included
 - Threaded replies — non-negotiable to keep channels clean
 - Standalone questions (no conversation memory) — each question gets fresh web search
+- [Phase 01-core-pipeline]: Perplexity client uses placeholder api_key for test-safe module imports
+- [Phase 01-core-pipeline]: format_answer uses Slack mrkdwn <url|title> syntax not markdown
+- [Phase 01-core-pipeline]: Bolt App test patches WebClient.auth_test to avoid live Slack API calls
 
 ### Pending Todos
 
@@ -73,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T22:48:43.883Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-core-pipeline/01-CONTEXT.md
+Last session: 2026-03-12T23:06:49.171Z
+Stopped at: Completed 01-core-pipeline/01-01-PLAN.md
+Resume file: None

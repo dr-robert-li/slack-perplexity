@@ -18,8 +18,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **RESP-01**: Bot posts a "Searching..." loading indicator before the answer arrives
 - [ ] **RESP-02**: Bot updates the loading message with the full answer once Perplexity responds
-- [ ] **RESP-03**: Answers include numbered source citations with clickable URLs extracted from Perplexity search results
-- [ ] **RESP-04**: Bot uses Perplexity `pro-search` preset for optimized model selection and web search
+- [x] **RESP-03**: Answers include numbered source citations with clickable URLs extracted from Perplexity search results
+- [x] **RESP-04**: Bot uses Perplexity `pro-search` preset for optimized model selection and web search
 
 ### Reliability
 
@@ -30,7 +30,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### App Surface
 
 - [ ] **SURF-01**: App Home tab displays bot description and usage instructions
-- [ ] **SURF-02**: Bot runs via Socket Mode (no public URL required)
+- [x] **SURF-02**: Bot runs via Socket Mode (no public URL required)
 
 ## v2 Requirements
 
@@ -69,13 +69,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INTR-04 | Phase 1 | Pending |
 | RESP-01 | Phase 1 | Pending |
 | RESP-02 | Phase 1 | Pending |
-| RESP-03 | Phase 1 | Pending |
-| RESP-04 | Phase 1 | Pending |
+| RESP-03 | Phase 1 | Complete |
+| RESP-04 | Phase 1 | Complete |
 | RELY-01 | Phase 1 | Pending |
 | RELY-02 | Phase 1 | Pending |
 | RELY-03 | Phase 1 | Pending |
 | SURF-01 | Phase 2 | Pending |
-| SURF-02 | Phase 1 | Pending |
+| SURF-02 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 13 total
