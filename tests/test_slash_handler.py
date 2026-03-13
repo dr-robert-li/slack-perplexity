@@ -154,6 +154,32 @@ class TestSlashHandlerPipeline:
         assert "brain is offline" in last_call.kwargs["text"]
         assert last_call.kwargs["replace_original"] is True
 
+    def test_run_ask_does_not_call_context_functions(self):
+        """run_ask must NOT call fetch_thread_history or fetch_channel_history — /ask is standalone."""
+        from handlers.slash_handler import run_ask
+
+        body = make_slash_body(text="What is Python?")
+        respond = MagicMock()
+
+        # If slash_handler imports context functions and calls them, these patches will detect it.
+        # If slash_handler doesn't import them at all, the patches simply do nothing — pass either way.
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx, \
+             patch("handlers.slash_handler.format_answer") as mock_fmt, \
+             patch("handlers.slash_handler.split_message") as mock_split, \
+             patch("handlers.slash_handler.greeted_users", set()):
+            mock_pplx.return_value = {"answer": "A", "citations": []}
+            mock_fmt.return_value = "A"
+            mock_split.return_value = ["A"]
+
+            # Verify no context module attributes exist on the slash_handler module
+            import handlers.slash_handler as slash_mod
+            assert not hasattr(slash_mod, "fetch_thread_history"), \
+                "slash_handler must NOT import fetch_thread_history"
+            assert not hasattr(slash_mod, "fetch_channel_history"), \
+                "slash_handler must NOT import fetch_channel_history"
+
+            run_ask(body=body, respond=respond)
+
     def test_overflow_chunks_sent_as_separate_messages(self):
         """When answer splits into multiple chunks, extras are sent as follow-ups."""
         from handlers.slash_handler import run_ask

@@ -68,7 +68,10 @@ class TestDMHandlerPipeline:
         event = make_dm_event(ts="111.222")
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": "Answer", "citations": []}
             mock_fmt.return_value = "Formatted answer"
             handle_dm(mock_slack_client, event)
@@ -87,7 +90,10 @@ class TestDMHandlerPipeline:
         mock_slack_client.chat_postMessage.return_value = {"ts": loading_ts}
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": "Answer", "citations": []}
             mock_fmt.return_value = "Formatted answer"
             handle_dm(mock_slack_client, event)
@@ -104,12 +110,15 @@ class TestDMHandlerPipeline:
         event = make_dm_event(text="What is Python?", user="U_FRESH_1a")
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": "Python is...", "citations": [{"url": "u", "title": "t"}]}
             mock_fmt.return_value = "Python is...\n---\n[1] <u|t>"
             handle_dm(mock_slack_client, event)
 
-        mock_pplx.assert_called_once_with("What is Python?")
+        mock_pplx.assert_called_once_with("What is Python?", messages=[])
         mock_fmt.assert_called_once_with("Python is...", [{"url": "u", "title": "t"}])
         mock_slack_client.chat_update.assert_called_once()
 
@@ -121,7 +130,10 @@ class TestDMHandlerPipeline:
         event = make_dm_event(ts=event_ts, user="U_FRESH_2b")
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": "A", "citations": []}
             mock_fmt.return_value = "A"
             handle_dm(mock_slack_client, event)
@@ -137,7 +149,10 @@ class TestDMHandlerPipeline:
         loading_ts = "777.888"
         mock_slack_client.chat_postMessage.return_value = {"ts": loading_ts}
 
-        with patch("handlers.shared.query_perplexity") as mock_pplx:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.side_effect = RuntimeError("API down")
             handle_dm(mock_slack_client, event)
 
@@ -158,7 +173,10 @@ class TestDMHandlerPipeline:
         event = make_dm_event(user=unique_user)
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": "A", "citations": []}
             mock_fmt.return_value = "Formatted"
 
@@ -185,7 +203,10 @@ class TestDMHandlerPipeline:
         long_answer = "X" * 10000  # Exceeds 3800-char limit
 
         with patch("handlers.shared.query_perplexity") as mock_pplx, \
-             patch("handlers.shared.format_answer") as mock_fmt:
+             patch("handlers.shared.format_answer") as mock_fmt, \
+             patch("handlers.shared.resolve_uids", side_effect=lambda t, c: t), \
+             patch("handlers.message_handler.fetch_channel_history", return_value=[]), \
+             patch("handlers.message_handler.get_bot_user_id", return_value="UBOT"):
             mock_pplx.return_value = {"answer": long_answer, "citations": []}
             mock_fmt.return_value = long_answer
             handle_dm(mock_slack_client, event)
