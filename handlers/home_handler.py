@@ -1,7 +1,8 @@
 """App Home tab handler — publishes a Block Kit view to the user's Home tab."""
 
-# TODO: Replace ROBERT_LI_UID with the real Slack user ID for the bot owner.
-ROBERT_LI_UID = "ROBERT_LI_UID"
+import os
+
+ADMIN_UID = os.environ.get("ADMIN_UID", "")
 
 
 def handle_app_home_opened(client, event: dict, logger) -> None:
@@ -47,7 +48,7 @@ def handle_app_home_opened(client, event: dict, logger) -> None:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Issues? Contact <@{ROBERT_LI_UID}>",
+                    "text": f"Issues? Contact <@{ADMIN_UID}>",
                 },
             },
         ],

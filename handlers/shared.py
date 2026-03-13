@@ -1,4 +1,5 @@
 """Shared handler pipeline — shared logic for DMs, @mentions, slash commands, App Home."""
+import os
 import re
 import threading
 
@@ -9,8 +10,12 @@ from utils.formatting import format_answer, split_message
 greeted_users: set = set()
 
 # Constants
+ADMIN_UID = os.environ.get("ADMIN_UID", "")
+_ERROR_BASE = "Uh oh, it seems my brain is offline"
 ERROR_MSG = (
-    "Uh oh, it seems my brain is offline \u2014 talk to @Robert Li about trying to kick start it"
+    f"{_ERROR_BASE} \u2014 talk to <@{ADMIN_UID}> about trying to kick start it"
+    if ADMIN_UID
+    else f"{_ERROR_BASE} \u2014 please contact an admin"
 )
 GREETING = (
     "Hey there! I'm Kahm-pew-terr, your AI research assistant. "

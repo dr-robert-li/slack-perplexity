@@ -130,7 +130,7 @@ class TestDMHandlerPipeline:
             assert call[1]["thread_ts"] == event_ts
 
     def test_error_message(self, mock_slack_client):
-        """When query_perplexity raises an exception, handler calls chat_update with friendly error containing '@Robert Li'."""
+        """When query_perplexity raises an exception, handler calls chat_update with friendly error message."""
         from handlers.message_handler import handle_dm
 
         event = make_dm_event()
@@ -142,7 +142,7 @@ class TestDMHandlerPipeline:
             handle_dm(mock_slack_client, event)
 
         update_kwargs = mock_slack_client.chat_update.call_args[1]
-        assert "@Robert Li" in update_kwargs["text"]
+        assert "brain is offline" in update_kwargs["text"]
         assert update_kwargs["ts"] == loading_ts
 
     def test_first_time_greeting(self, mock_slack_client):
