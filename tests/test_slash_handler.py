@@ -67,7 +67,7 @@ class TestSlashHandlerEmpty:
         body = make_slash_body(text=text)
         respond = MagicMock()
 
-        with patch("handlers.shared._handle_question") as mock_hq:
+        with patch("handlers.slash_handler._handle_question") as mock_hq:
             run_ask(client=mock_slack_client, body=body, respond=respond)
             mock_hq.assert_not_called()
 
@@ -84,7 +84,7 @@ class TestSlashHandlerPipeline:
         body = make_slash_body(text="What is Python?", channel="C001", user="U123")
         respond = MagicMock()
 
-        with patch("handlers.shared._handle_question") as mock_hq:
+        with patch("handlers.slash_handler._handle_question") as mock_hq:
             run_ask(client=mock_slack_client, body=body, respond=respond)
 
             mock_hq.assert_called_once_with(
@@ -113,7 +113,7 @@ class TestSlashHandlerPipeline:
         body = make_slash_body(text="  What is Python?  ")
         respond = MagicMock()
 
-        with patch("handlers.shared._handle_question") as mock_hq:
+        with patch("handlers.slash_handler._handle_question") as mock_hq:
             run_ask(client=mock_slack_client, body=body, respond=respond)
 
             _, kwargs = mock_hq.call_args
