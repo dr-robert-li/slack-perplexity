@@ -5,9 +5,9 @@ milestone_name: extended-interactions
 status: planning
 stopped_at: ""
 last_updated: "2026-03-13"
-last_activity: 2026-03-13 — Milestone v1.1 started
+last_activity: 2026-03-13 — Roadmap created for v1.1 (Phases 3-4)
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,21 +21,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-13)
 
 **Core value:** Any Slack user can ask a question and get a high-quality, source-cited answer powered by Perplexity's real-time web search — without leaving Slack.
-**Current focus:** Defining requirements for v1.1
+**Current focus:** Phase 3 — Interaction Surfaces (ready to plan)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-13 — Milestone v1.1 started
+Phase: 3 of 4 (Interaction Surfaces)
+Plan: — (not started)
+Status: Ready to plan
+Last activity: 2026-03-13 — v1.1 roadmap created; Phases 3 and 4 defined
 
 Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+- Total plans completed: 3 (v1.0 Phase 1)
 - Average duration: —
 - Total execution time: —
 
@@ -43,16 +43,15 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| Phase 01-core-pipeline P01 | 3 | 2 tasks | 13 files |
+| Phase 01-core-pipeline P02 | 3 | 2 tasks | 4 files |
+| Phase 01-core-pipeline P03 | 1 | 1 tasks | 2 files |
 
 **Recent Trend:**
 - Last 5 plans: —
 - Trend: —
 
 *Updated after each plan completion*
-| Phase 01-core-pipeline P01 | 3 | 2 tasks | 13 files |
-| Phase 01-core-pipeline P02 | 3 | 2 tasks | 4 files |
-| Phase 01-core-pipeline P03 | 1 | 1 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -64,13 +63,9 @@ Recent decisions affecting current work:
 - Socket Mode over HTTP — runs locally, no public URL needed
 - pro-search preset — auto model selection, web search, URL fetch included
 - Threaded replies — non-negotiable to keep channels clean
-- Standalone questions (no conversation memory) — each question gets fresh web search
-- [Phase 01-core-pipeline]: Perplexity client uses placeholder api_key for test-safe module imports
+- [Phase 01-core-pipeline]: Lazy listener syntax is app.event('message')(ack=fn, lazy=[fn])
 - [Phase 01-core-pipeline]: format_answer uses Slack mrkdwn <url|title> syntax not markdown
-- [Phase 01-core-pipeline]: Bolt App test patches WebClient.auth_test to avoid live Slack API calls
-- [Phase 01-core-pipeline]: Lazy listener syntax is app.event('message')(ack=fn, lazy=[fn]) not app.event('message', lazy=[fn])(fn)
-- [Phase 01-core-pipeline]: greeted_users module-level set sufficient for single-process Socket Mode bot first-time greeting
-- [Phase 01-core-pipeline]: .env is never committed — .gitignore entry ensures credentials are always local-only
+- [Phase 01-core-pipeline]: greeted_users module-level set sufficient for single-process Socket Mode bot
 
 ### Pending Todos
 
@@ -79,9 +74,10 @@ None yet.
 ### Blockers/Concerns
 
 - Perplexity `pro-search` P95 latency unknown under real load; threading pattern handles this architecturally but a timeout threshold may be needed after first real use
+- Phase 4 CTXT-03 (channel context window): need to decide whether context is fetched for @mentions only or all non-threaded messages
 
 ## Session Continuity
 
-Last session: 2026-03-12T23:13:54.689Z
-Stopped at: Checkpoint: Task 2 human-action (Live Smoke Test) awaiting real Slack/Perplexity credentials
+Last session: 2026-03-13
+Stopped at: Roadmap creation for v1.1 — Phase 3 and 4 defined, ready for plan-phase 3
 Resume file: None

@@ -81,8 +81,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | INTR-01 | Phase 1 | Complete |
-| INTR-02 | Phase 2 | Pending |
-| INTR-03 | Phase 2 | Pending |
+| INTR-02 | Phase 1 | Complete |
+| INTR-03 | Phase 3 | Pending |
 | INTR-04 | Phase 1 | Complete |
 | RESP-01 | Phase 1 | Complete |
 | RESP-02 | Phase 1 | Complete |
@@ -91,14 +91,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELY-01 | Phase 1 | Complete |
 | RELY-02 | Phase 1 | Complete |
 | RELY-03 | Phase 1 | Complete |
-| SURF-01 | Phase 2 | Pending |
+| SURF-01 | Phase 3 | Pending |
 | SURF-02 | Phase 1 | Complete |
+| SURF-03 | Phase 3 | Pending |
+| SURF-04 | Phase 3 | Pending |
+| SURF-05 | Phase 3 | Pending |
+| CTXT-01 | Phase 4 | Pending |
+| CTXT-02 | Phase 4 | Pending |
+| CTXT-03 | Phase 4 | Pending |
+| CTXT-04 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 13 total
-- Mapped to phases: 13
+- v1.1 requirements: 7 total
+- Mapped to phases: 20
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-13*
-*Last updated: 2026-03-13 after roadmap creation — all 13 requirements mapped*
+*Last updated: 2026-03-13 after v1.1 roadmap creation — all 20 requirements mapped*

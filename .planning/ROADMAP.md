@@ -1,21 +1,14 @@
 # Roadmap: Perplexity Slack Bot
 
-## Overview
+## Milestones
 
-Two phases deliver a fully working bot. Phase 1 builds the complete core pipeline — project scaffolding, Perplexity service layer, and the DM handler with all reliability and response-quality requirements baked in. Phase 2 adds the remaining interaction surfaces (@mention, /ask slash command, App Home tab) that build directly on the Phase 1 foundation.
+- ✅ **v1.0 Core Bot** - Phases 1-2 (Phase 1 complete; Phase 2 superseded by v1.1 scope)
+- 🚧 **v1.1 Extended Interactions** - Phases 3-4 (in progress)
 
 ## Phases
 
-**Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
-- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
-
-Decimal phases appear between their surrounding integers in numeric order.
-
-- [x] **Phase 1: Core Pipeline** - Project setup, Perplexity service layer, DM handler with full reliability and response quality (completed 2026-03-12)
-- [ ] **Phase 2: Full Trigger Coverage** - @mention, /ask slash command, and App Home tab
-
-## Phase Details
+<details>
+<summary>✅ v1.0 Core Bot (Phases 1-2)</summary>
 
 ### Phase 1: Core Pipeline
 **Goal**: Users can DM the bot a question and receive a cited, threaded answer — with a loading indicator, graceful error handling, and zero infinite-loop risk
@@ -30,26 +23,53 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 01-01-PLAN.md — Project scaffolding, Perplexity service layer, formatting utils, test infrastructure
-- [ ] 01-02-PLAN.md — DM handler with full pipeline (loading, citations, errors, greeting)
-- [ ] 01-03-PLAN.md — Live smoke test with real Slack credentials
+- [x] 01-01-PLAN.md — Project scaffolding, Perplexity service layer, formatting utils, test infrastructure
+- [x] 01-02-PLAN.md — DM handler with full pipeline (loading, citations, errors, greeting)
+- [x] 01-03-PLAN.md — Live smoke test with real Slack credentials
 
-### Phase 2: Full Trigger Coverage
-**Goal**: Any Slack user can reach the bot through @mention in any channel, the /ask slash command, or the App Home tab — all using the same response pipeline built in Phase 1
+### Phase 2: Full Trigger Coverage (superseded)
+**Goal**: @mention handler and App Home — absorbed into v1.1 scope (Phases 3-4)
+**Status**: Superseded — @mention shipped as part of Phase 1 codebase; /ask and App Home moved to Phase 3
+**Requirements**: INTR-02, INTR-03, SURF-01 (remapped to Phase 3)
+**Plans**: Superseded before execution
+
+</details>
+
+---
+
+### 🚧 v1.1 Extended Interactions (In Progress)
+
+**Milestone Goal:** Add all remaining interaction surfaces (slash command, App Home, group DMs) and conversation context (thread history, mention resolution, channel context) so the bot understands follow-up questions and works everywhere in Slack.
+
+#### Phase 3: Interaction Surfaces
+**Goal**: Any Slack user can reach the bot through the `/ask` slash command, group DMs, or the App Home tab — all using the same response pipeline already built
 **Depends on**: Phase 1
-**Requirements**: INTR-02, INTR-03, SURF-01
+**Requirements**: SURF-03, SURF-04, SURF-05
 **Success Criteria** (what must be TRUE):
-  1. User @mentions the bot in any channel and receives a cited answer as a threaded reply in that channel
-  2. User runs `/ask <question>` from any channel and receives a cited answer in a thread, whether or not the bot is invited to that channel
-  3. App Home tab displays bot description and clear usage instructions for all three interaction methods
+  1. User runs `/ask <question>` from any channel and receives a cited answer posted as a visible thread reply in that channel
+  2. User in a group DM sends a message and the bot responds with a cited, threaded answer using the same pipeline as 1:1 DMs
+  3. App Home tab shows bot description, usage instructions for all interaction methods (DM, @mention, /ask, group DM), and current status
+**Plans**: TBD
+
+#### Phase 4: Conversation Context
+**Goal**: The bot understands follow-up questions by reading prior thread or channel messages before querying Perplexity, and displays human-readable names instead of raw Slack UIDs
+**Depends on**: Phase 3
+**Requirements**: CTXT-01, CTXT-02, CTXT-03, CTXT-04
+**Success Criteria** (what must be TRUE):
+  1. User sends a follow-up question in a thread (e.g., "What about in Python?") and the bot answers in context of the prior conversation without the user repeating themselves
+  2. When a message contains `<@UID>` mention tags, the bot sends Perplexity the resolved display name (e.g., "Robert Li") instead of the raw UID
+  3. User asks a question in a channel (not in a thread) and the bot includes recent channel messages as context, enabling answers that reference the current conversation
+  4. History depth defaults to 10 messages and can be adjusted per-workspace without code changes
 **Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2
+Phases execute in numeric order: 3 → 4
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Core Pipeline | 3/3 | Complete   | 2026-03-12 |
-| 2. Full Trigger Coverage | 0/TBD | Not started | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Core Pipeline | v1.0 | 3/3 | Complete | 2026-03-12 |
+| 2. Full Trigger Coverage | v1.0 | 0/0 | Superseded | - |
+| 3. Interaction Surfaces | v1.1 | 0/TBD | Not started | - |
+| 4. Conversation Context | v1.1 | 0/TBD | Not started | - |
