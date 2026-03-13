@@ -10,8 +10,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Core Interaction
 
 - [x] **INTR-01**: User can DM the bot a question and receive a Perplexity-powered answer
-- [ ] **INTR-02**: User can @mention the bot in any channel and receive an answer in a thread
-- [ ] **INTR-03**: User can use `/ask <question>` slash command from any channel to get an answer
+- [x] **INTR-02**: User can @mention the bot in any channel and receive an answer in a thread
+- [x] **INTR-03**: User can use `/ask <question>` slash command from any channel to get an answer
 - [x] **INTR-04**: All bot responses are posted as threaded replies (not top-level messages)
 
 ### Response Quality
@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### App Surface
 
-- [ ] **SURF-01**: App Home tab displays bot description and usage instructions
+- [x] **SURF-01**: App Home tab displays bot description and usage instructions
 - [x] **SURF-02**: Bot runs via Socket Mode (no public URL required)
 
 ## v1.1 Requirements
@@ -82,7 +82,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | INTR-01 | Phase 1 | Complete |
 | INTR-02 | Phase 1 | Complete |
-| INTR-03 | Phase 3 | Pending |
+| INTR-03 | Phase 3 | Complete |
 | INTR-04 | Phase 1 | Complete |
 | RESP-01 | Phase 1 | Complete |
 | RESP-02 | Phase 1 | Complete |
@@ -91,7 +91,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELY-01 | Phase 1 | Complete |
 | RELY-02 | Phase 1 | Complete |
 | RELY-03 | Phase 1 | Complete |
-| SURF-01 | Phase 3 | Pending |
+| SURF-01 | Phase 3 | Complete |
 | SURF-02 | Phase 1 | Complete |
 | SURF-03 | Phase 3 | Complete |
 | SURF-04 | Phase 3 | Complete |

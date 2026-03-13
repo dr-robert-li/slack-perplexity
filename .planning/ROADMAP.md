@@ -52,8 +52,8 @@ Plans:
 **Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 03-01-PLAN.md — Refactor handler module: extract shared.py, split handlers, add group DM support, fix thread_ts=None
-- [ ] 03-02-PLAN.md — /ask slash command, App Home tab, wire into app.py, live verification
+- [x] 03-01-PLAN.md — Refactor handler module: extract shared.py, split handlers, add group DM support, fix thread_ts=None
+- [x] 03-02-PLAN.md — /ask slash command, App Home tab, wire into app.py, live verification
 
 #### Phase 4: Conversation Context
 **Goal**: The bot understands follow-up questions by reading prior thread or channel messages before querying Perplexity, and displays human-readable names instead of raw Slack UIDs
@@ -75,5 +75,5 @@ Phases execute in numeric order: 3 → 4
 |-------|-----------|----------------|--------|-----------|
 | 1. Core Pipeline | v1.0 | 3/3 | Complete | 2026-03-12 |
 | 2. Full Trigger Coverage | v1.0 | 0/0 | Superseded | - |
-| 3. Interaction Surfaces | 2/2 | Complete   | 2026-03-13 | - |
+| 3. Interaction Surfaces | v1.1 | 2/2 | Complete | 2026-03-13 |
 | 4. Conversation Context | v1.1 | 0/TBD | Not started | - |
