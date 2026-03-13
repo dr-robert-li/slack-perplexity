@@ -1,5 +1,5 @@
 """Unit tests for /ask slash command handler."""
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, call
 import pytest
 
 
@@ -44,77 +44,135 @@ class TestSlashHandlerAck:
 
 class TestSlashHandlerEmpty:
     @pytest.mark.parametrize("text", ["", "   ", None])
-    def test_empty_text_calls_respond_ephemeral(self, text, mock_slack_client):
+    def test_empty_text_calls_respond_ephemeral(self, text):
         """Empty or whitespace-only text returns ephemeral usage hint."""
         from handlers.slash_handler import run_ask
 
         body = make_slash_body(text=text)
         respond = MagicMock()
-        run_ask(client=mock_slack_client, body=body, respond=respond)
+        run_ask(body=body, respond=respond)
 
         respond.assert_called_once()
         call_kwargs = respond.call_args
-        # Must include "Usage: /ask" somewhere in the text
         text_arg = call_kwargs.kwargs.get("text") or call_kwargs.args[0]
         assert "Usage: /ask" in text_arg
         assert call_kwargs.kwargs.get("response_type") == "ephemeral"
 
     @pytest.mark.parametrize("text", ["", "   ", None])
-    def test_empty_text_does_not_call_handle_question(self, text, mock_slack_client):
-        """_handle_question must NOT be invoked when text is empty."""
+    def test_empty_text_does_not_call_perplexity(self, text):
+        """query_perplexity must NOT be invoked when text is empty."""
         from handlers.slash_handler import run_ask
 
         body = make_slash_body(text=text)
         respond = MagicMock()
 
-        with patch("handlers.slash_handler._handle_question") as mock_hq:
-            run_ask(client=mock_slack_client, body=body, respond=respond)
-            mock_hq.assert_not_called()
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx:
+            run_ask(body=body, respond=respond)
+            mock_pplx.assert_not_called()
 
 
 # ---------------------------------------------------------------------------
-# Valid text → pipeline
+# Valid text → respond-based pipeline
 # ---------------------------------------------------------------------------
 
 class TestSlashHandlerPipeline:
-    def test_valid_text_calls_handle_question(self, mock_slack_client):
-        """Valid text must invoke _handle_question with correct args."""
+    def test_valid_text_posts_searching_then_answer(self):
+        """Valid text posts 'Searching...' via respond, then replaces with answer."""
         from handlers.slash_handler import run_ask
 
-        body = make_slash_body(text="What is Python?", channel="C001", user="U123")
+        body = make_slash_body(text="What is Python?", user="U999")
         respond = MagicMock()
 
-        with patch("handlers.slash_handler._handle_question") as mock_hq:
-            run_ask(client=mock_slack_client, body=body, respond=respond)
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx, \
+             patch("handlers.slash_handler.format_answer") as mock_fmt, \
+             patch("handlers.slash_handler.split_message") as mock_split, \
+             patch("handlers.slash_handler.greeted_users", set()):
+            mock_pplx.return_value = {"answer": "A language", "citations": []}
+            mock_fmt.return_value = "A language"
+            mock_split.return_value = ["A language"]
 
-            mock_hq.assert_called_once_with(
-                mock_slack_client,
-                channel="C001",
-                thread_ts=None,
-                user_id="U123",
-                user_text="What is Python?",
-            )
+            run_ask(body=body, respond=respond)
 
-    def test_valid_text_does_not_call_respond(self, mock_slack_client):
-        """respond() must NOT be called when text is present."""
+        calls = respond.call_args_list
+        # First call: Searching...
+        assert calls[0] == call(text="Searching...", response_type="in_channel")
+        # Second call: replace with answer
+        assert calls[1].kwargs["replace_original"] is True
+        assert "A language" in calls[1].kwargs["text"]
+
+    def test_valid_text_does_not_call_respond_ephemeral(self):
+        """respond() with ephemeral must NOT be called when text is present."""
         from handlers.slash_handler import run_ask
 
         body = make_slash_body(text="What is Python?")
         respond = MagicMock()
 
-        with patch("handlers.shared._handle_question"):
-            run_ask(client=mock_slack_client, body=body, respond=respond)
-            respond.assert_not_called()
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx, \
+             patch("handlers.slash_handler.format_answer") as mock_fmt, \
+             patch("handlers.slash_handler.split_message") as mock_split, \
+             patch("handlers.slash_handler.greeted_users", set()):
+            mock_pplx.return_value = {"answer": "A", "citations": []}
+            mock_fmt.return_value = "A"
+            mock_split.return_value = ["A"]
 
-    def test_text_is_stripped(self, mock_slack_client):
-        """Surrounding whitespace is stripped before passing to _handle_question."""
+            run_ask(body=body, respond=respond)
+
+        for c in respond.call_args_list:
+            assert c.kwargs.get("response_type") != "ephemeral"
+
+    def test_text_is_stripped(self):
+        """Surrounding whitespace is stripped before passing to Perplexity."""
         from handlers.slash_handler import run_ask
 
         body = make_slash_body(text="  What is Python?  ")
         respond = MagicMock()
 
-        with patch("handlers.slash_handler._handle_question") as mock_hq:
-            run_ask(client=mock_slack_client, body=body, respond=respond)
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx, \
+             patch("handlers.slash_handler.format_answer") as mock_fmt, \
+             patch("handlers.slash_handler.split_message") as mock_split, \
+             patch("handlers.slash_handler.greeted_users", set()):
+            mock_pplx.return_value = {"answer": "A", "citations": []}
+            mock_fmt.return_value = "A"
+            mock_split.return_value = ["A"]
 
-            _, kwargs = mock_hq.call_args
-            assert kwargs["user_text"] == "What is Python?"
+            run_ask(body=body, respond=respond)
+
+            mock_pplx.assert_called_once_with("What is Python?")
+
+    def test_error_calls_respond_with_error_msg(self):
+        """When query_perplexity raises, respond replaces with error message."""
+        from handlers.slash_handler import run_ask
+
+        body = make_slash_body(text="What is Python?")
+        respond = MagicMock()
+
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx:
+            mock_pplx.side_effect = RuntimeError("API down")
+            run_ask(body=body, respond=respond)
+
+        last_call = respond.call_args_list[-1]
+        assert "brain is offline" in last_call.kwargs["text"]
+        assert last_call.kwargs["replace_original"] is True
+
+    def test_overflow_chunks_sent_as_separate_messages(self):
+        """When answer splits into multiple chunks, extras are sent as follow-ups."""
+        from handlers.slash_handler import run_ask
+
+        body = make_slash_body(text="Big question")
+        respond = MagicMock()
+
+        with patch("handlers.slash_handler.query_perplexity") as mock_pplx, \
+             patch("handlers.slash_handler.format_answer") as mock_fmt, \
+             patch("handlers.slash_handler.split_message") as mock_split, \
+             patch("handlers.slash_handler.greeted_users", set()):
+            mock_pplx.return_value = {"answer": "Long", "citations": []}
+            mock_fmt.return_value = "Long"
+            mock_split.return_value = ["chunk1", "chunk2", "chunk3"]
+
+            run_ask(body=body, respond=respond)
+
+        calls = respond.call_args_list
+        # Searching + replace + 2 overflow = 4 calls
+        assert len(calls) == 4
+        assert calls[2].kwargs["text"] == "chunk2"
+        assert calls[3].kwargs["text"] == "chunk3"
