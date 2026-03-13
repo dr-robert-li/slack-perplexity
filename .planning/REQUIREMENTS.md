@@ -44,10 +44,10 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 ### Conversation Context
 
-- [ ] **CTXT-01**: Bot reads up to N previous messages in a thread before querying Perplexity, enabling follow-up questions
-- [ ] **CTXT-02**: `<@UID>` mention tags in messages are resolved to display names via Slack API before sending to Perplexity
-- [ ] **CTXT-03**: Bot reads up to N recent channel messages as context when a question is asked outside a thread
-- [ ] **CTXT-04**: Thread/channel history depth is configurable per-workspace with a default of 10 messages
+- [x] **CTXT-01**: Bot reads up to N previous messages in a thread before querying Perplexity, enabling follow-up questions
+- [x] **CTXT-02**: `<@UID>` mention tags in messages are resolved to display names via Slack API before sending to Perplexity
+- [x] **CTXT-03**: Bot reads up to N recent channel messages as context when a question is asked outside a thread
+- [x] **CTXT-04**: Thread/channel history depth is configurable per-workspace with a default of 10 messages
 
 ## v2 Requirements
 
@@ -96,10 +96,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SURF-03 | Phase 3 | Complete |
 | SURF-04 | Phase 3 | Complete |
 | SURF-05 | Phase 3 | Complete |
-| CTXT-01 | Phase 4 | Pending |
-| CTXT-02 | Phase 4 | Pending |
-| CTXT-03 | Phase 4 | Pending |
-| CTXT-04 | Phase 4 | Pending |
+| CTXT-01 | Phase 4 | Complete |
+| CTXT-02 | Phase 4 | Complete |
+| CTXT-03 | Phase 4 | Complete |
+| CTXT-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 13 total
