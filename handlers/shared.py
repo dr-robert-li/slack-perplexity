@@ -4,10 +4,23 @@ import re
 import threading
 
 from services.perplexity import query_perplexity
+from services.context import resolve_uids
 from utils.formatting import format_answer, split_message
 
 # Module-level state for first-time greeting detection
 greeted_users: set = set()
+
+# Cached bot user ID — populated on first call to get_bot_user_id()
+_bot_user_id: str | None = None
+
+
+def get_bot_user_id(client) -> str:
+    """Return the bot's Slack user ID, fetching and caching it on first call."""
+    global _bot_user_id
+    if _bot_user_id is None:
+        _bot_user_id = client.auth_test()["user_id"]
+    return _bot_user_id
+
 
 # Constants
 ADMIN_UID = os.environ.get("ADMIN_UID", "")
@@ -36,14 +49,30 @@ def update_slow_message(client, channel: str, loading_ts: str) -> None:
 
 
 def _handle_question(
-    client, channel: str, thread_ts: str | None, user_id: str, user_text: str
+    client,
+    channel: str,
+    thread_ts: str | None,
+    user_id: str,
+    user_text: str,
+    messages: list[dict] | None = None,
 ) -> None:
     """Shared logic: post loading indicator, call Perplexity, update with cited answer.
 
     When thread_ts is None (e.g. slash command / App Home), the loading message is posted
     as a top-level message. The loading message ts is then used as the thread anchor for
     all subsequent overflow chunk replies.
+
+    Args:
+        client: Slack WebClient.
+        channel: Channel ID to post into.
+        thread_ts: Thread timestamp to reply in, or None for top-level.
+        user_id: Slack user ID of the asker.
+        user_text: The question text (may contain <@UID> tags).
+        messages: Optional prior conversation history for Perplexity context.
     """
+    # Resolve any <@UID> tags in the question text to display names.
+    user_text = resolve_uids(user_text, client)
+
     # Build loading message kwargs — omit thread_ts entirely when None so the message
     # is posted at the top level (not inside any thread).
     loading_kwargs: dict = {"channel": channel, "text": "Searching..."}
@@ -61,7 +90,7 @@ def _handle_question(
     timer.start()
 
     try:
-        result = query_perplexity(user_text)
+        result = query_perplexity(user_text, messages=messages)
         timer.cancel()
 
         formatted = format_answer(result["answer"], result["citations"])

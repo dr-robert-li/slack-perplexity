@@ -1,5 +1,6 @@
 """Message handler — DM (im) and group DM (mpim) message event handlers."""
-from handlers.shared import _handle_question, MENTION_RE, greeted_users
+from handlers.shared import _handle_question, MENTION_RE, greeted_users, get_bot_user_id
+from services.context import fetch_thread_history, fetch_channel_history
 
 
 def ack_message(ack, event):
@@ -27,12 +28,21 @@ def handle_dm(client, event: dict) -> None:
     if event.get("channel_type") != "im":
         return
 
+    bot_user_id = get_bot_user_id(client)
+    channel = event["channel"]
+
+    if event.get("thread_ts"):
+        messages = fetch_thread_history(client, channel, event["thread_ts"], event["ts"], bot_user_id)
+    else:
+        messages = fetch_channel_history(client, channel, bot_user_id)
+
     _handle_question(
         client,
-        channel=event["channel"],
+        channel=channel,
         thread_ts=event["ts"],
         user_id=event.get("user", ""),
         user_text=event.get("text", ""),
+        messages=messages,
     )
 
 
@@ -51,12 +61,21 @@ def handle_mpim(client, event: dict) -> None:
 
     user_text = MENTION_RE.sub("", raw_text).strip()
 
+    bot_user_id = get_bot_user_id(client)
+    channel = event["channel"]
+
+    if event.get("thread_ts"):
+        messages = fetch_thread_history(client, channel, event["thread_ts"], event["ts"], bot_user_id)
+    else:
+        messages = fetch_channel_history(client, channel, bot_user_id)
+
     _handle_question(
         client,
-        channel=event["channel"],
+        channel=channel,
         thread_ts=event["ts"],
         user_id=event.get("user", ""),
         user_text=user_text,
+        messages=messages,
     )
 
 
