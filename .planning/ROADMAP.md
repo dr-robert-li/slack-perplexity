@@ -49,7 +49,11 @@ Plans:
   1. User runs `/ask <question>` from any channel and receives a cited answer posted as a visible thread reply in that channel
   2. User in a group DM sends a message and the bot responds with a cited, threaded answer using the same pipeline as 1:1 DMs
   3. App Home tab shows bot description, usage instructions for all interaction methods (DM, @mention, /ask, group DM), and current status
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Refactor handler module: extract shared.py, split handlers, add group DM support, fix thread_ts=None
+- [ ] 03-02-PLAN.md — /ask slash command, App Home tab, wire into app.py, live verification
 
 #### Phase 4: Conversation Context
 **Goal**: The bot understands follow-up questions by reading prior thread or channel messages before querying Perplexity, and displays human-readable names instead of raw Slack UIDs
@@ -71,5 +75,5 @@ Phases execute in numeric order: 3 → 4
 |-------|-----------|----------------|--------|-----------|
 | 1. Core Pipeline | v1.0 | 3/3 | Complete | 2026-03-12 |
 | 2. Full Trigger Coverage | v1.0 | 0/0 | Superseded | - |
-| 3. Interaction Surfaces | v1.1 | 0/TBD | Not started | - |
+| 3. Interaction Surfaces | v1.1 | 0/2 | In progress | - |
 | 4. Conversation Context | v1.1 | 0/TBD | Not started | - |
