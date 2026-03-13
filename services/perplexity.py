@@ -8,11 +8,16 @@ from perplexity import Perplexity
 pplx_client = Perplexity(api_key=os.environ.get("PERPLEXITY_API_KEY", "placeholder"))
 
 
-def query_perplexity(question: str) -> dict:
+def query_perplexity(question: str, messages: list[dict] | None = None) -> dict:
     """Query Perplexity using the pro-search preset and extract citations.
 
     Args:
         question: The question to ask Perplexity.
+        messages: Optional list of prior conversation messages as structured
+                  {type, role, content} dicts. When provided (and non-empty),
+                  messages are sent as a list with the question appended as the
+                  final user message. When None or empty, question is sent as a
+                  plain string (backward-compatible behavior).
 
     Returns:
         A dict with:
@@ -22,7 +27,13 @@ def query_perplexity(question: str) -> dict:
     Raises:
         Any Perplexity SDK exceptions propagate to the caller unchanged.
     """
-    response = pplx_client.responses.create(preset="pro-search", input=question)
+    if messages:
+        input_items = list(messages) + [
+            {"type": "message", "role": "user", "content": question}
+        ]
+        response = pplx_client.responses.create(preset="pro-search", input=input_items)
+    else:
+        response = pplx_client.responses.create(preset="pro-search", input=question)
 
     answer = response.output_text
 
