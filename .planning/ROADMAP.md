@@ -64,7 +64,7 @@ Plans:
   2. When a message contains `<@UID>` mention tags, the bot sends Perplexity the resolved display name (e.g., "Robert Li") instead of the raw UID
   3. User asks a question in a channel (not in a thread) and the bot includes recent channel messages as context, enabling answers that reference the current conversation
   4. History depth defaults to 10 messages and can be adjusted per-workspace without code changes
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 04-01-PLAN.md — Context infrastructure: UID resolver, history fetchers, config, structured Perplexity input
@@ -80,4 +80,4 @@ Phases execute in numeric order: 3 -> 4
 | 1. Core Pipeline | v1.0 | 3/3 | Complete | 2026-03-12 |
 | 2. Full Trigger Coverage | v1.0 | 0/0 | Superseded | - |
 | 3. Interaction Surfaces | v1.1 | 2/2 | Complete | 2026-03-13 |
-| 4. Conversation Context | v1.1 | 0/2 | Not started | - |
+| 4. Conversation Context | 1/2 | In Progress|  | - |
