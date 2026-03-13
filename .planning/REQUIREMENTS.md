@@ -40,7 +40,7 @@ Requirements for milestone v1.1. Each maps to roadmap phases.
 
 - [ ] **SURF-03**: User runs `/ask <question>` from any channel and receives a cited answer as a visible threaded reply
 - [ ] **SURF-04**: App Home tab displays bot description, usage instructions for all interaction methods, and current status
-- [ ] **SURF-05**: Bot responds to messages in group DMs (multi-person DMs) using the same pipeline
+- [x] **SURF-05**: Bot responds to messages in group DMs (multi-person DMs) using the same pipeline
 
 ### Conversation Context
 
@@ -95,7 +95,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SURF-02 | Phase 1 | Complete |
 | SURF-03 | Phase 3 | Pending |
 | SURF-04 | Phase 3 | Pending |
-| SURF-05 | Phase 3 | Pending |
+| SURF-05 | Phase 3 | Complete |
 | CTXT-01 | Phase 4 | Pending |
 | CTXT-02 | Phase 4 | Pending |
 | CTXT-03 | Phase 4 | Pending |

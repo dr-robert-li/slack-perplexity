@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Extended Interactions
 status: planning
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-13T01:03:56.055Z"
+stopped_at: Completed 03-interaction-surfaces-01-PLAN.md
+last_updated: "2026-03-13T01:35:56.153Z"
 last_activity: 2026-03-13 — v1.1 roadmap created; Phases 3 and 4 defined
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 5
+  completed_plans: 4
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 03-interaction-surfaces P01 | 3 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -66,6 +67,8 @@ Recent decisions affecting current work:
 - [Phase 01-core-pipeline]: Lazy listener syntax is app.event('message')(ack=fn, lazy=[fn])
 - [Phase 01-core-pipeline]: format_answer uses Slack mrkdwn <url|title> syntax not markdown
 - [Phase 01-core-pipeline]: greeted_users module-level set sufficient for single-process Socket Mode bot
+- [Phase 03-interaction-surfaces]: thread_ts=None posts top-level loading message; overflow chunks thread off loading_ts (anchor_ts pattern)
+- [Phase 03-interaction-surfaces]: mpim handler requires @mention match before calling _handle_question (no broadcast responses)
 
 ### Pending Todos
 
@@ -78,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T01:03:56.052Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-interaction-surfaces/03-CONTEXT.md
+Last session: 2026-03-13T01:35:56.152Z
+Stopped at: Completed 03-interaction-surfaces-01-PLAN.md
+Resume file: None
