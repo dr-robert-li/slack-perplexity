@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-03-13
+
+### Added
+
+- `/ask` slash command — run `/ask <question>` from any channel for a visible threaded reply
+- Group DM support — @mention the bot in a group DM to get a cited answer
+- App Home tab — bot description, usage instructions for all interaction methods, and admin contact
+- `ADMIN_UID` env var — configurable admin contact shown in error messages and App Home
+
+### Changed
+
+- Refactored monolithic `dm_handler.py` into `shared.py`, `message_handler.py`, `mention_handler.py`, `slash_handler.py`, and `home_handler.py`
+- Error messages now reference `ADMIN_UID` from env instead of a hardcoded name
+- Test suite expanded from 21 to 50 tests
+
 ## [0.2.0] - 2026-03-13
 
 ### Added
