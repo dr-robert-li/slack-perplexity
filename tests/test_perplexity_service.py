@@ -89,3 +89,84 @@ class TestQueryPerplexity:
             from services.perplexity import query_perplexity
             with pytest.raises(Exception, match="Connection failed"):
                 query_perplexity("broken question")
+
+    def test_string_only_passes_string_to_create(self, mock_perplexity_response):
+        """query_perplexity('question') passes string input (backward compatible)."""
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("simple question")
+
+            mock_client.responses.create.assert_called_once_with(
+                preset="pro-search", input="simple question"
+            )
+
+    def test_structured_messages_sent_as_list(self, mock_perplexity_response):
+        """query_perplexity with messages sends list input to responses.create."""
+        prior_messages = [
+            {"type": "message", "role": "user", "content": "prior question"}
+        ]
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("follow-up", messages=prior_messages)
+
+            call_kwargs = mock_client.responses.create.call_args
+            sent_input = call_kwargs.kwargs["input"]
+            assert isinstance(sent_input, list)
+            assert sent_input[0] == {"type": "message", "role": "user", "content": "prior question"}
+            assert sent_input[-1] == {"type": "message", "role": "user", "content": "follow-up"}
+
+    def test_question_appended_as_final_user_message(self, mock_perplexity_response):
+        """When messages provided, question is appended as final user message."""
+        prior = [
+            {"type": "message", "role": "user", "content": "first"},
+            {"type": "message", "role": "assistant", "content": "answer"},
+        ]
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("new question", messages=prior)
+
+            call_kwargs = mock_client.responses.create.call_args
+            sent_input = call_kwargs.kwargs["input"]
+            assert len(sent_input) == 3
+            assert sent_input[-1]["role"] == "user"
+            assert sent_input[-1]["content"] == "new question"
+
+    def test_none_messages_uses_string_input(self, mock_perplexity_response):
+        """query_perplexity with messages=None passes string to responses.create."""
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("question", messages=None)
+
+            call_kwargs = mock_client.responses.create.call_args
+            assert call_kwargs.kwargs["input"] == "question"
+
+    def test_empty_messages_uses_string_input(self, mock_perplexity_response):
+        """query_perplexity with messages=[] passes string to responses.create."""
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("question", messages=[])
+
+            call_kwargs = mock_client.responses.create.call_args
+            assert call_kwargs.kwargs["input"] == "question"
+
+    def test_preset_pro_search_with_structured_input(self, mock_perplexity_response):
+        """pro-search preset is used even when messages list is provided."""
+        prior = [{"type": "message", "role": "user", "content": "prior"}]
+        with patch("services.perplexity.pplx_client") as mock_client:
+            mock_client.responses.create.return_value = mock_perplexity_response
+
+            from services.perplexity import query_perplexity
+            query_perplexity("question", messages=prior)
+
+            call_kwargs = mock_client.responses.create.call_args
+            assert call_kwargs.kwargs["preset"] == "pro-search"
