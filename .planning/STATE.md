@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Extended Interactions
-status: planning
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-13T03:00:03.459Z"
-last_activity: 2026-03-13 — Phase 3 fully complete; all 5 interaction surfaces live-verified
+status: executing
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-13T03:07:02.063Z"
+last_activity: "2026-03-13 — Phase 4 Plan 01 complete: context infrastructure built"
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
   percent: 86
 ---
 
@@ -55,6 +55,7 @@ Progress: [█████████░] 86%
 | Phase 03-interaction-surfaces P01 | 3 | 2 tasks | 7 files |
 | Phase 03-interaction-surfaces P02 | 2 | 2 tasks | 5 files |
 | Phase 04-conversation-context P01 | 15 | 2 tasks | 4 files |
+| Phase 04-conversation-context P02 | 15 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ Recent decisions affecting current work:
 - [Phase 04-conversation-context]: UID cache is module-level dict persisting for bot lifetime — sufficient for single-process Socket Mode
 - [Phase 04-conversation-context]: query_perplexity messages=None/[] falls back to string input for full backward compatibility with all existing call sites
 - [Phase 04-conversation-context]: All history fetchers return [] on any exception — safe degradation preserves bot operation
+- [Phase 04-conversation-context]: get_bot_user_id() cached in handlers/shared.py not app.py — avoids circular import risk while still caching for bot lifetime
+- [Phase 04-conversation-context]: UID resolution happens in _handle_question (central) not in each handler — single responsibility, no duplication
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T03:00:03.457Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-13T03:07:02.061Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
