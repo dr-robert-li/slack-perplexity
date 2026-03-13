@@ -32,6 +32,23 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **SURF-01**: App Home tab displays bot description and usage instructions
 - [x] **SURF-02**: Bot runs via Socket Mode (no public URL required)
 
+## v1.1 Requirements
+
+Requirements for milestone v1.1. Each maps to roadmap phases.
+
+### Interaction Surfaces
+
+- [ ] **SURF-03**: User runs `/ask <question>` from any channel and receives a cited answer as a visible threaded reply
+- [ ] **SURF-04**: App Home tab displays bot description, usage instructions for all interaction methods, and current status
+- [ ] **SURF-05**: Bot responds to messages in group DMs (multi-person DMs) using the same pipeline
+
+### Conversation Context
+
+- [ ] **CTXT-01**: Bot reads up to N previous messages in a thread before querying Perplexity, enabling follow-up questions
+- [ ] **CTXT-02**: `<@UID>` mention tags in messages are resolved to display names via Slack API before sending to Perplexity
+- [ ] **CTXT-03**: Bot reads up to N recent channel messages as context when a question is asked outside a thread
+- [ ] **CTXT-04**: Thread/channel history depth is configurable per-workspace with a default of 10 messages
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -40,7 +57,6 @@ Deferred to future release. Tracked but not in current roadmap.
 
 - **UX-01**: Rotating loading status messages during search
 - **UX-02**: Per-query cost/usage tracking and logging
-- **UX-03**: Conversation memory for multi-turn follow-up questions
 
 ### Administration
 
@@ -51,11 +67,12 @@ Deferred to future release. Tracked but not in current roadmap.
 
 | Feature | Reason |
 |---------|--------|
-| Multi-turn conversation memory | Adds statefulness, storage, token cost; undermines Perplexity's fresh-search strength |
 | Per-user model selection | pro-search preset handles this; unnecessary complexity |
 | HTTP deployment mode | Socket Mode sufficient; no public URL needed |
-| Admin dashboard | Not needed for v1, small user base |
+| Admin dashboard | Not needed yet, small user base |
 | OAuth distribution to other workspaces | Single workspace install only |
+| File attachment processing | Requires vision model or document extraction; defer |
+| Persistent memory across sessions | Context is per-thread/channel only |
 
 ## Traceability
 

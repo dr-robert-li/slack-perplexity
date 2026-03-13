@@ -8,38 +8,51 @@ A Slack bot that lets any workspace user ask questions and get AI-powered, web-s
 
 Any Slack user can ask a question and get a high-quality, source-cited answer powered by Perplexity's real-time web search — without leaving Slack.
 
+## Current Milestone: v1.1 Extended Interactions
+
+**Goal:** Add remaining interaction surfaces (slash command, App Home, group DMs) and conversation context (thread history, @mention resolution, channel context) so the bot understands follow-up questions and works everywhere in Slack.
+
+**Target features:**
+- `/ask` slash command with threaded replies
+- App Home tab with usage instructions
+- Group DM support
+- Thread history context for follow-ups (configurable depth, default 10)
+- @mention resolution to display names
+- Channel context window for non-threaded questions
+
 ## Requirements
 
 ### Validated
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+- ✓ Bot responds to DMs with Perplexity-powered answers — v1.0 Phase 1
+- ✓ Bot responds to @mentions in channels — v1.0 Phase 1
+- ✓ Threaded replies, loading indicator, cited answers — v1.0 Phase 1
+- ✓ pro-search preset, error handling, Socket Mode — v1.0 Phase 1
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Bot responds to direct messages with Perplexity-powered answers
-- [ ] Bot responds to @mentions in any channel it's invited to
-- [ ] Bot responds to `/ask` slash command from any channel
-- [ ] App Home tab displays bot info and usage instructions
-- [ ] All responses are posted as threaded replies (not top-level messages)
-- [ ] Bot posts a "Searching..." indicator before the answer arrives
-- [ ] Answers include numbered source citations with clickable URLs
-- [ ] Uses Perplexity `pro-search` preset for optimized search + model selection
-- [ ] Friendly error message when backend is offline: "Uh oh, it seems my brain is offline — talk to @Robert Li about trying to kick start it"
-- [ ] Runs via Socket Mode (no public URL required)
+- [ ] `/ask` slash command with visible threaded reply from any channel
+- [ ] App Home tab with bot description and usage instructions
+- [ ] Group DM support using existing pipeline
+- [ ] Thread history context (up to N messages) for follow-up questions
+- [ ] @mention resolution — `<@UID>` → display names via Slack API
+- [ ] Channel context window for questions outside threads
+- [ ] Configurable history depth per-workspace (default 10)
 
 ### Out of Scope
 
 <!-- Explicit boundaries. Includes reasoning to prevent re-adding. -->
 
-- Conversation history / multi-turn chat — keep it simple, each question is standalone
 - User authentication or access control — any workspace member can use it
-- HTTP deployment mode — Socket Mode is sufficient for now
-- Admin dashboard or analytics — not needed for v1
+- HTTP deployment mode — Socket Mode is sufficient
+- Admin dashboard or analytics — not needed yet
 - Custom model selection per user — pro-search preset handles this
+- File attachment processing — requires vision model or document extraction, defer
+- Persistent memory across sessions — context is per-thread/channel only
 
 ## Context
 
@@ -67,7 +80,7 @@ Any Slack user can ask a question and get a high-quality, source-cited answer po
 | Socket Mode over HTTP | Simplest setup, runs locally without public URL | — Pending |
 | pro-search preset | Optimized defaults, auto model selection, includes web search + URL fetch | — Pending |
 | Threaded replies | Keeps channels clean when bot is mentioned | — Pending |
-| Standalone questions (no conversation memory) | Reduces complexity, each question gets fresh web search | — Pending |
+| Standalone questions (no conversation memory) | Reduces complexity, each question gets fresh web search | ⚠️ Revisit — v1.1 adds thread/channel context |
 
 ---
-*Last updated: 2026-03-13 after initialization*
+*Last updated: 2026-03-13 after milestone v1.1 started*

@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
+milestone: v1.1
+milestone_name: extended-interactions
 status: planning
-stopped_at: "Checkpoint: Task 2 human-action (Live Smoke Test) awaiting real Slack/Perplexity credentials"
-last_updated: "2026-03-12T23:13:58.775Z"
-last_activity: 2026-03-13 — Roadmap created
+stopped_at: ""
+last_updated: "2026-03-13"
+last_activity: 2026-03-13 — Milestone v1.1 started
 progress:
-  total_phases: 2
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-13)
 
 **Core value:** Any Slack user can ask a question and get a high-quality, source-cited answer powered by Perplexity's real-time web search — without leaving Slack.
-**Current focus:** Phase 1 — Core Pipeline
+**Current focus:** Defining requirements for v1.1
 
 ## Current Position
 
-Phase: 1 of 2 (Core Pipeline)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-03-13 — Roadmap created
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-13 — Milestone v1.1 started
 
 Progress: [░░░░░░░░░░] 0%
 
