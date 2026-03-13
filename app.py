@@ -13,8 +13,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
-from handlers.dm_handler import register_dm_handler
-register_dm_handler(app)
+from handlers.message_handler import register_message_handlers
+from handlers.mention_handler import register_mention_handler
+register_message_handlers(app)
+register_mention_handler(app)
 
 
 # No-op handlers to silence unhandled event warnings

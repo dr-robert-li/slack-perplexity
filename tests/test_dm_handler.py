@@ -32,7 +32,7 @@ class TestDMHandlerGuards:
 
     def test_ignores_bot_messages(self, mock_slack_client):
         """When event has bot_id set, handler does not call chat_postMessage."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(bot_id="B999")
         handle_dm(mock_slack_client, event)
@@ -41,7 +41,7 @@ class TestDMHandlerGuards:
 
     def test_ignores_non_dm(self, mock_slack_client):
         """When event has channel_type != 'im', handler does not call chat_postMessage."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(channel_type="channel")
         handle_dm(mock_slack_client, event)
@@ -50,7 +50,7 @@ class TestDMHandlerGuards:
 
     def test_ignores_message_subtypes(self, mock_slack_client):
         """When event has a subtype, handler does not process it."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(subtype="message_changed")
         handle_dm(mock_slack_client, event)
@@ -63,12 +63,12 @@ class TestDMHandlerPipeline:
 
     def test_loading_message_posted(self, mock_slack_client):
         """Handler calls chat_postMessage with 'Searching...' and thread_ts=event['ts']."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(ts="111.222")
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": "Answer", "citations": []}
             mock_fmt.return_value = "Formatted answer"
             handle_dm(mock_slack_client, event)
@@ -80,14 +80,14 @@ class TestDMHandlerPipeline:
 
     def test_loading_message_updated(self, mock_slack_client):
         """After Perplexity returns, handler calls chat_update with loading_ts and answer."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(ts="111.222")
         loading_ts = "333.444"
         mock_slack_client.chat_postMessage.return_value = {"ts": loading_ts}
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": "Answer", "citations": []}
             mock_fmt.return_value = "Formatted answer"
             handle_dm(mock_slack_client, event)
@@ -99,12 +99,12 @@ class TestDMHandlerPipeline:
 
     def test_dm_triggers_response(self, mock_slack_client):
         """Given valid DM event, handler calls query_perplexity with event text, then format_answer, then chat_update."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(text="What is Python?", user="U_FRESH_1a")
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": "Python is...", "citations": [{"url": "u", "title": "t"}]}
             mock_fmt.return_value = "Python is...\n---\n[1] <u|t>"
             handle_dm(mock_slack_client, event)
@@ -115,13 +115,13 @@ class TestDMHandlerPipeline:
 
     def test_reply_is_threaded(self, mock_slack_client):
         """All chat_postMessage calls include thread_ts matching the original event ts."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event_ts = "555.666"
         event = make_dm_event(ts=event_ts, user="U_FRESH_2b")
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": "A", "citations": []}
             mock_fmt.return_value = "A"
             handle_dm(mock_slack_client, event)
@@ -131,13 +131,13 @@ class TestDMHandlerPipeline:
 
     def test_error_message(self, mock_slack_client):
         """When query_perplexity raises an exception, handler calls chat_update with friendly error containing '@Robert Li'."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event()
         loading_ts = "777.888"
         mock_slack_client.chat_postMessage.return_value = {"ts": loading_ts}
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx:
+        with patch("handlers.shared.query_perplexity") as mock_pplx:
             mock_pplx.side_effect = RuntimeError("API down")
             handle_dm(mock_slack_client, event)
 
@@ -147,8 +147,8 @@ class TestDMHandlerPipeline:
 
     def test_first_time_greeting(self, mock_slack_client):
         """First message from a user_id prepends greeting text; second does not."""
-        import handlers.dm_handler as mod
-        from handlers.dm_handler import handle_dm
+        import handlers.shared as mod
+        from handlers.message_handler import handle_dm
 
         # Use a unique user id not used by other tests
         unique_user = "U_UNIQUE_GREETING_XYZ"
@@ -157,8 +157,8 @@ class TestDMHandlerPipeline:
 
         event = make_dm_event(user=unique_user)
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": "A", "citations": []}
             mock_fmt.return_value = "Formatted"
 
@@ -176,7 +176,7 @@ class TestDMHandlerPipeline:
 
     def test_long_response_split(self, mock_slack_client):
         """When formatted answer exceeds 3800 chars, first chunk updates loading message, additional chunks post as new thread messages."""
-        from handlers.dm_handler import handle_dm
+        from handlers.message_handler import handle_dm
 
         event = make_dm_event(ts="999.000", user="U_FRESH_3c")
         loading_ts = "111.999"
@@ -184,8 +184,8 @@ class TestDMHandlerPipeline:
 
         long_answer = "X" * 10000  # Exceeds 3800-char limit
 
-        with patch("handlers.dm_handler.query_perplexity") as mock_pplx, \
-             patch("handlers.dm_handler.format_answer") as mock_fmt:
+        with patch("handlers.shared.query_perplexity") as mock_pplx, \
+             patch("handlers.shared.format_answer") as mock_fmt:
             mock_pplx.return_value = {"answer": long_answer, "citations": []}
             mock_fmt.return_value = long_answer
             handle_dm(mock_slack_client, event)
