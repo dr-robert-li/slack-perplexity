@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-03-13
+
+### Added
+
+- Conversation context — follow-up questions in threads are answered with awareness of prior messages
+- UID resolution — `<@UID>` mention tags are resolved to human-readable display names before querying Perplexity
+- Channel context — @mentions in channels include recent channel messages as context
+- Thread history fetching — DMs, group DMs, and mentions in threads fetch prior thread messages
+- Configurable context depth via `HISTORY_DEPTH` (default 10) and `MSG_TRUNCATE_LENGTH` (default 500) env vars
+- `services/context.py` — UID resolver with in-memory cache, thread and channel history fetchers
+- Structured multi-turn message support in Perplexity service — `query_perplexity` accepts optional `messages` list
+- Bot user ID caching in `handlers/shared.py` via `get_bot_user_id()` to filter bot's own messages from history
+- 44 new tests (94 total) covering context assembly, UID resolution, handler wiring, and structured message passing
+
+### Changed
+
+- `_handle_question` in `handlers/shared.py` now accepts `messages=` parameter and resolves UIDs centrally
+- `handlers/message_handler.py` and `handlers/mention_handler.py` fetch thread or channel history before answering
+- `/ask` slash command intentionally unchanged — remains standalone with no conversation context
+
 ## [0.3.0] - 2026-03-13
 
 ### Added

@@ -1,15 +1,28 @@
 # Kahm-pew-terr
 
-A Slack bot that answers questions using Perplexity AI with cited sources. DM it, @mention it in any channel, use the `/ask` slash command, or add it to a group DM — get a researched answer with clickable citations.
+A Slack bot that answers questions using Perplexity AI with cited sources. DM it, @mention it in any channel, use the `/ask` slash command, or add it to a group DM — get a researched answer with clickable citations. Follow-up questions in threads are understood in context, and `<@UID>` mentions are resolved to display names automatically.
 
 ## How it works
 
 1. Reach the bot via DM, @mention, `/ask` command, or group DM @mention
 2. It replies with "Searching..." in a thread
-3. Perplexity AI searches the web and generates a cited answer
-4. The loading message updates in-place with the full response
-5. Markdown is automatically converted to Slack-native formatting
-6. Citations appear as clickable Slack links at the bottom
+3. Prior thread or channel messages are gathered as conversation context
+4. `<@UID>` mention tags are resolved to human-readable display names
+5. Perplexity AI searches the web and generates a cited answer using the full context
+6. The loading message updates in-place with the full response
+7. Markdown is automatically converted to Slack-native formatting
+8. Citations appear as clickable Slack links at the bottom
+
+### Conversation context
+
+The bot reads prior messages before answering so follow-up questions work naturally:
+
+- **Thread replies** — asks "What about in Python?" after a thread about programming languages, and the bot knows what you're referring to
+- **Channel mentions** — @mention the bot in a channel and it includes recent channel messages as context
+- **DMs and group DMs** — prior messages in the conversation are included as context
+- **`/ask` is standalone** — slash commands answer based on the question alone, with no conversation history
+
+Context depth defaults to 10 messages and can be adjusted per-workspace via the `HISTORY_DEPTH` env var.
 
 ## Setup
 
@@ -65,6 +78,7 @@ A Slack bot that answers questions using Perplexity AI with cited sources. DM it
    | `groups:history` | Read private channel messages |
    | `mpim:history` | Read group DM messages |
    | `commands` | Register slash commands |
+   | `users:read` | Resolve user IDs to display names |
    | `reactions:read` | Read emoji reactions (future use) |
 
 ### 5. Install to Workspace
@@ -97,7 +111,12 @@ SLACK_BOT_TOKEN=xoxb-your-bot-token
 SLACK_APP_TOKEN=xapp-your-app-token
 PERPLEXITY_API_KEY=pplx-your-api-key
 ADMIN_UID=U0YOUR-SLACK-UID
+HISTORY_DEPTH=10
+MSG_TRUNCATE_LENGTH=500
 ```
+
+- `HISTORY_DEPTH` — number of prior messages to include as conversation context (default: 10)
+- `MSG_TRUNCATE_LENGTH` — max characters per history message before truncation (default: 500)
 
 Start the bot:
 
@@ -128,25 +147,30 @@ You should see `Bolt app is running!` — the bot is now live.
 ## Project Structure
 
 ```
-├── app.py                  # Entry point — Bolt app with Socket Mode
+├── app.py                      # Entry point — Bolt app with Socket Mode
 ├── handlers/
-│   ├── shared.py           # Shared question-answering pipeline
-│   ├── message_handler.py  # DM and group DM handlers
-│   ├── mention_handler.py  # Channel @mention handler
-│   ├── slash_handler.py    # /ask slash command handler
-│   └── home_handler.py     # App Home tab handler
+│   ├── shared.py               # Shared question-answering pipeline, UID resolution, bot ID cache
+│   ├── message_handler.py      # DM and group DM handlers with context fetching
+│   ├── mention_handler.py      # Channel @mention handler with context fetching
+│   ├── slash_handler.py        # /ask slash command handler (standalone, no context)
+│   └── home_handler.py         # App Home tab handler
 ├── services/
-│   └── perplexity.py       # Perplexity API client with citation extraction
+│   ├── context.py              # UID resolver, thread/channel history fetchers
+│   └── perplexity.py           # Perplexity API client with structured multi-turn support
 ├── utils/
-│   └── formatting.py       # Slack mrkdwn formatter and message splitter
+│   └── formatting.py           # Slack mrkdwn formatter and message splitter
 ├── tests/
-│   ├── conftest.py         # Shared pytest fixtures
+│   ├── conftest.py             # Shared pytest fixtures
 │   ├── test_app.py
+│   ├── test_context.py
 │   ├── test_dm_handler.py
 │   ├── test_formatting.py
 │   ├── test_home_handler.py
-│   ├── test_slash_handler.py
-│   └── test_perplexity_service.py
+│   ├── test_mention_handler.py
+│   ├── test_message_handler.py
+│   ├── test_perplexity_service.py
+│   ├── test_shared.py
+│   └── test_slash_handler.py
 ├── requirements.txt
 └── .env.example
 ```
