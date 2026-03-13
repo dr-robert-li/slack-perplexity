@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Extended Interactions
 status: planning
-stopped_at: Completed 03-interaction-surfaces-01-PLAN.md
-last_updated: "2026-03-13T01:35:56.153Z"
+stopped_at: Completed 03-interaction-surfaces/03-02 tasks 1-2; paused at Task 3 checkpoint (human live verification)
+last_updated: "2026-03-13T01:40:22.096Z"
 last_activity: 2026-03-13 — v1.1 roadmap created; Phases 3 and 4 defined
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 0
 ---
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 03-interaction-surfaces P01 | 3 | 2 tasks | 7 files |
+| Phase 03-interaction-surfaces P02 | 2 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-core-pipeline]: greeted_users module-level set sufficient for single-process Socket Mode bot
 - [Phase 03-interaction-surfaces]: thread_ts=None posts top-level loading message; overflow chunks thread off loading_ts (anchor_ts pattern)
 - [Phase 03-interaction-surfaces]: mpim handler requires @mention match before calling _handle_question (no broadcast responses)
+- [Phase 03-interaction-surfaces]: ack unconditional: ack_ask always calls ack(); empty text check is in run_ask (lazy), keeping ack fast
+- [Phase 03-interaction-surfaces]: Patch at import site: mock handlers.slash_handler._handle_question not handlers.shared._handle_question
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T01:35:56.152Z
-Stopped at: Completed 03-interaction-surfaces-01-PLAN.md
+Last session: 2026-03-13T01:40:22.094Z
+Stopped at: Completed 03-interaction-surfaces/03-02 tasks 1-2; paused at Task 3 checkpoint (human live verification)
 Resume file: None
