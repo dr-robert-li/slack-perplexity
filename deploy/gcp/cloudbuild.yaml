@@ -1,0 +1,24 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/kahm-pew-terr", "."]
+  - name: gcr.io/cloud-builders/docker
+    args: ["push", "gcr.io/$PROJECT_ID/kahm-pew-terr"]
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    args:
+      - gcloud
+      - run
+      - deploy
+      - kahm-pew-terr
+      - --image=gcr.io/$PROJECT_ID/kahm-pew-terr
+      - --region=$_REGION
+      - --no-allow-unauthenticated
+      - --min-instances=1
+      - --max-instances=1
+      - --cpu=1
+      - --memory=256Mi
+      - --no-cpu-throttling
+      - --set-secrets=SLACK_BOT_TOKEN=slack-bot-token:latest,SLACK_APP_TOKEN=slack-app-token:latest,PERPLEXITY_API_KEY=perplexity-api-key:latest
+      - --set-env-vars=ADMIN_UID=${_ADMIN_UID},HISTORY_DEPTH=10,MSG_TRUNCATE_LENGTH=500
+substitutions:
+  _REGION: us-central1
+  _ADMIN_UID: ""

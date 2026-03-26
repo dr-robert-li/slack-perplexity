@@ -1,0 +1,36 @@
+type: Microsoft.App/containerApps
+location: eastus
+properties:
+  managedEnvironmentId: /subscriptions/SUBSCRIPTION_ID/resourceGroups/RESOURCE_GROUP/providers/Microsoft.App/managedEnvironments/ENVIRONMENT_NAME
+  configuration:
+    activeRevisionsMode: Single
+    secrets:
+      - name: slack-bot-token
+        value: REPLACE_WITH_TOKEN
+      - name: slack-app-token
+        value: REPLACE_WITH_TOKEN
+      - name: perplexity-api-key
+        value: REPLACE_WITH_TOKEN
+  template:
+    containers:
+      - name: bot
+        image: REGISTRY.azurecr.io/kahm-pew-terr:latest
+        resources:
+          cpu: 0.25
+          memory: 0.5Gi
+        env:
+          - name: SLACK_BOT_TOKEN
+            secretRef: slack-bot-token
+          - name: SLACK_APP_TOKEN
+            secretRef: slack-app-token
+          - name: PERPLEXITY_API_KEY
+            secretRef: perplexity-api-key
+          - name: ADMIN_UID
+            value: ""
+          - name: HISTORY_DEPTH
+            value: "10"
+          - name: MSG_TRUNCATE_LENGTH
+            value: "500"
+    scale:
+      minReplicas: 1
+      maxReplicas: 1

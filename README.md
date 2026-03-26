@@ -1,5 +1,14 @@
 # Kahm-pew-terr
 
+[![CI](https://github.com/robertli/slack-computer/actions/workflows/ci.yml/badge.svg)](https://github.com/robertli/slack-computer/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.4.0-orange.svg)](CHANGELOG.md)
+[![Code style: PEP 8](https://img.shields.io/badge/code%20style-PEP%208-black.svg)](https://peps.python.org/pep-0008/)
+[![Security: Bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+
+**Author:** Dr. Robert Li
+
 A Slack bot that answers questions using Perplexity AI with cited sources. DM it, @mention it in any channel, use the `/ask` slash command, or add it to a group DM — get a researched answer with clickable citations. Follow-up questions in threads are understood in context, and `<@UID>` mentions are resolved to display names automatically.
 
 ## How it works
@@ -144,6 +153,19 @@ You should see `Bolt app is running!` — the bot is now live.
 - **Group DM:** Add the bot to a group DM, then `@Kahm-pew-terr your question here`
 - **App Home:** Click the bot in the sidebar and visit the Home tab
 
+## Docker
+
+```bash
+# Local
+docker compose up --build
+
+# Or standalone
+docker build -t kahm-pew-terr .
+docker run --env-file .env kahm-pew-terr
+```
+
+See [deploy/DEPLOY.md](deploy/DEPLOY.md) for GCP, AWS, and Azure deployment guides.
+
 ## Project Structure
 
 ```
@@ -161,16 +183,11 @@ You should see `Bolt app is running!` — the bot is now live.
 │   └── formatting.py           # Slack mrkdwn formatter and message splitter
 ├── tests/
 │   ├── conftest.py             # Shared pytest fixtures
-│   ├── test_app.py
-│   ├── test_context.py
-│   ├── test_dm_handler.py
-│   ├── test_formatting.py
-│   ├── test_home_handler.py
-│   ├── test_mention_handler.py
-│   ├── test_message_handler.py
-│   ├── test_perplexity_service.py
-│   ├── test_shared.py
-│   └── test_slash_handler.py
+│   ├── test_*.py               # Unit tests (94 tests)
+│   └── test_security.py        # Security and vulnerability tests
+├── deploy/                     # Cloud deployment configs (GCP, AWS, Azure)
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
 └── .env.example
 ```
@@ -178,7 +195,17 @@ You should see `Bolt app is running!` — the bot is now live.
 ## Testing
 
 ```bash
+# Run all tests
 pytest
+
+# Run with coverage
+pytest --cov=. --cov-report=term-missing
+
+# Security tests only
+pytest tests/test_security.py -v
+
+# Dependency vulnerability scan
+pip-audit
 ```
 
 ## License

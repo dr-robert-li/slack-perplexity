@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-cov
+
+      - name: Run tests with coverage
+        run: pytest --cov=. --cov-report=term-missing --cov-fail-under=70
+
+      - name: Run security tests
+        run: pytest tests/test_security.py -v
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install bandit pip-audit safety
+
+      - name: Bandit — static security analysis
+        run: bandit -r handlers/ services/ utils/ app.py -ll -ii
+
+      - name: pip-audit — dependency vulnerability scan
+        run: pip-audit --strict --desc
+
+      - name: Check for hardcoded secrets
+        run: |
+          # Fail if any file (excluding .env.example and tests) contains token patterns
+          if grep -rE '(xoxb-[a-zA-Z0-9]{10,}|xapp-[a-zA-Z0-9]{10,}|pplx-[a-zA-Z0-9]{20,})' \
+            --include='*.py' handlers/ services/ utils/ app.py; then
+            echo "::error::Hardcoded secrets detected in source files"
+            exit 1
+          fi
+          echo "No hardcoded secrets found"
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t kahm-pew-terr:test .
+
+      - name: Verify non-root user
+        run: |
+          USER=$(docker inspect kahm-pew-terr:test --format '{{.Config.User}}')
+          if [ "$USER" = "root" ] || [ -z "$USER" ]; then
+            echo "::error::Docker image runs as root"
+            exit 1
+          fi
+          echo "Container runs as user: $USER"

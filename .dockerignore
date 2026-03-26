@@ -1,0 +1,13 @@
+.env
+.git
+.gitignore
+.pytest_cache
+__pycache__
+*.pyc
+*.egg-info
+tests/
+pytest.ini
+*.md
+*.png
+.planning/
+LICENSE

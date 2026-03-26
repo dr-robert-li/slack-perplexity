@@ -1,0 +1,42 @@
+{
+  "family": "kahm-pew-terr",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "bot",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/kahm-pew-terr:latest",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/kahm-pew-terr",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "bot"
+        }
+      },
+      "secrets": [
+        {
+          "name": "SLACK_BOT_TOKEN",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:kahm-pew-terr/slack-bot-token"
+        },
+        {
+          "name": "SLACK_APP_TOKEN",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:kahm-pew-terr/slack-app-token"
+        },
+        {
+          "name": "PERPLEXITY_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:REGION:ACCOUNT_ID:secret:kahm-pew-terr/perplexity-api-key"
+        }
+      ],
+      "environment": [
+        { "name": "ADMIN_UID", "value": "" },
+        { "name": "HISTORY_DEPTH", "value": "10" },
+        { "name": "MSG_TRUNCATE_LENGTH", "value": "500" }
+      ]
+    }
+  ]
+}
