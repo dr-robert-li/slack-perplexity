@@ -140,12 +140,6 @@ az containerapp create \
 
 ---
 
-## Why not Cloudflare?
-
-Cloudflare Workers/Pages have execution time limits (30s-15min) and cannot maintain the persistent outbound WebSocket that Socket Mode requires. Switching to HTTP webhook mode would enable Cloudflare, but requires a publicly accessible URL and different Slack app configuration.
-
----
-
 ## Scaling Notes
 
 - **Max instances = 1**: Socket Mode maintains a single WebSocket connection. Multiple instances would create duplicate event processing.
