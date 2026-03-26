@@ -1,6 +1,6 @@
 # Kahm-pew-terr
 
-[![CI](https://github.com/robertli/slack-computer/actions/workflows/ci.yml/badge.svg)](https://github.com/robertli/slack-computer/actions/workflows/ci.yml)
+[![CI](https://github.com/dr-robert-li/slack-perplexity/actions/workflows/ci.yml/badge.svg)](https://github.com/dr-robert-li/slack-perplexity/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.4.0-orange.svg)](CHANGELOG.md)
