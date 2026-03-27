@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-03-27
+
+### Added
+
+- Docker support — `Dockerfile`, `docker-compose.yml`, and `.dockerignore` for containerized deployment
+- Cloud deployment configs for GCP (Cloud Build), AWS (ECS Fargate), and Azure (Container Apps) in `deploy/`
+- GitHub Actions CI pipeline — test matrix (Python 3.10/3.11/3.12), Bandit static analysis, pip-audit dependency scan, Docker build verification
+- 38 security tests covering input injection (XSS, shell, prompt), secrets leakage, citation URL validation, UID cache poisoning, role assignment spoofing, and config security
+- No-op handlers for `reaction_added` and `reaction_removed` events to prevent unhandled event retry storms
+- Configurable `LOG_LEVEL` env var (default: `INFO`)
+
+### Fixed
+
+- WebSocket disconnect storm — unhandled `reaction_added` events caused Slack retries, triggering cascading `disconnect`/`too_many_websockets` reconnect loops that accumulated up to 10 stale connections
+
+### Changed
+
+- Logging level changed from hardcoded `DEBUG` to configurable via `LOG_LEVEL` env var
+- README updated with version badge, CI badge, author attribution, Docker and deployment sections
+- `.planning/` directory removed from git tracking
+
 ## [0.4.0] - 2026-03-13
 
 ### Added
